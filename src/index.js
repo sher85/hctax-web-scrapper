@@ -1,24 +1,59 @@
+// Load the Cheerio and Request libraries
 const cheerio = require('cheerio');
 const request = require('request');
 
+// Define the URL of the website to scrape
 const url = 'https://www.hctax.net/Property/listings/taxsalelisting';
+
+// Make an HTTP request to the website using the Request library
 request(url, (error, response, html) => {
+  // Check for errors and a successful response status code (200)
   if (!error && response.statusCode == 200) {
+    // Load the HTML into a Cheerio object
     const $ = cheerio.load(html);
+
+    // Define the path to the container of listings
+    const container =
+      '#taxSaleList > div.row.listingArea > div > ul.list-listings-2.list';
+
+    // Create an array to store the scraped properties
     const properties = [];
-    $('#dtBasicExample tbody tr').each((i, el) => {
-      const cols = $(el).find('td');
+
+    // Loop through each listing in the container
+    $(container + ' > li').each((i, el) => {
+      // Extract the data for the current listing
       const property = {
-        property_id: $(cols[0]).text(),
-        owner: $(cols[1]).text(),
-        address: $(cols[2]).text(),
-        delinquent_tax_year: $(cols[3]).text(),
-        sale_date: $(cols[4]).text(),
-        minimum_bid: $(cols[5]).text(),
-        status: $(cols[6]).text(),
+        address: $(el).find('h3 > span.address').text(),
+        city: $(el).find('h3 > span.city').text(),
+        state: $(el).find('h3 > span.state').text(),
+        zip: $(el).find('h3 > span.zip').text(),
+        precinct: $(el).find('h4 > strong.precinct').text(),
+        suitNumber: $(el).find('h4 > strong:nth-child(2)').text(),
+        account: $(el)
+          .find('table tbody tr:nth-child(1) td.account.listingTd strong')
+          .text(),
+        suitNumber2: $(el)
+          .find('table tbody tr:nth-child(1) td.SuitNumber.listingTd strong')
+          .text(),
+        adjudgedValue: $(el)
+          .find('table tbody tr:nth-child(2) td.adjudgedValue.listingTd strong')
+          .text(),
+        minBid: $(el)
+          .find('table tbody tr:nth-child(2) td.minBid.listingTd strong')
+          .text(),
       };
+
+      // Check whether the additional field exists for this listing
+      const additionalField = $(el).find('span > strong').text();
+      if (additionalField) {
+        property.additionalField = additionalField;
+      }
+
+      // Add the property object to the properties array
       properties.push(property);
     });
+
+    // Log the properties array to the console
     console.log(properties);
   }
 });
