@@ -1,7 +1,8 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
+const { saveProperties } = require('../database/database');
 
-// Define the URL of the website to scrape
+// Define the URL to scrape
 const url = 'https://www.hctax.net/Property/listings/taxsalelisting';
 
 // Define the function to scrape the properties
@@ -55,8 +56,10 @@ const scrape = () => {
           properties.push(property);
         });
 
-        console.log(properties[0]);
-        console.log(properties.length);
+        console.log('properties scraped in scraper.js: ', properties.length);
+
+        // Save the properties to the database
+        saveProperties(properties);
 
         // Resolve the promise with the properties array
         resolve(properties);

@@ -34,7 +34,32 @@ function getData(query, params = []) {
   });
 }
 
+// Define a function to save the scraped properties to the database
+function saveProperties(properties) {
+  console.log('number properties in database.js: ', properties.length);
+  return Promise.all(
+    properties.map((property) => {
+      const query = `INSERT INTO properties (address, city, state, zip, precinct, suit_number, account, suit_number_2, adjudged_value, min_bid, additional_field) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+      const params = [
+        property.address,
+        property.city,
+        property.state,
+        property.zip,
+        property.precinct,
+        property.suitNumber,
+        property.account,
+        property.suitNumber2,
+        property.adjudgedValue,
+        property.minBid,
+        property.additionalField,
+      ];
+      return runQuery(query, params);
+    })
+  );
+}
+
 module.exports = {
   runQuery,
   getData,
+  saveProperties,
 };

@@ -1,13 +1,21 @@
+const fs = require('fs');
 const { scrape } = require('./scraper/scraper');
+const createDB = require('./database/createDB');
 
-// Scrape the website and save the data to the database
+// Check if the database file exists and create it if it doesn't
+if (!fs.existsSync('./database/properties.db')) {
+  createDB();
+}
+
+// Scrape the website and log the properties to the console
 async function run() {
   try {
     console.log(`Scraping ${new Date().toLocaleString()}`);
-    await scrape();
+    const properties = await scrape();
+    console.log('Scraped properties:', properties.length);
     console.log('Scrape successful');
   } catch (error) {
-    console.error(`Error scraping or saving properties: ${error.message}`);
+    console.error(`Error scraping properties: ${error.message}`);
   }
 }
 
