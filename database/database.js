@@ -85,8 +85,6 @@ async function updateProperty(property) {
 }
 
 async function saveProperties(properties) {
-  console.log('Scraped properties:', properties.length);
-
   let updatedEntries = 0;
 
   // Loop through each property and insert or update it in the database
