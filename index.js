@@ -12,7 +12,6 @@ async function run() {
   try {
     console.log(`Scraping ${new Date().toLocaleString()}`);
     const properties = await scrape();
-    console.log('Scraped properties:', properties.length);
     console.log('Scrape successful');
   } catch (error) {
     console.error(`Error scraping properties: ${error.message}`);

@@ -56,8 +56,6 @@ const scrape = () => {
           properties.push(property);
         });
 
-        console.log('properties scraped in scraper.js: ', properties.length);
-
         // Save the properties to the database
         saveProperties(properties);
 
