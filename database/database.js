@@ -85,7 +85,9 @@ async function updateProperty(property) {
 }
 
 async function saveProperties(properties) {
-  console.log(`Scraped ${properties.length} properties`);
+  console.log('Scraped properties:', properties.length);
+
+  let updatedEntries = 0;
 
   // Loop through each property and insert or update it in the database
   for (let i = 0; i < properties.length; i++) {
@@ -129,6 +131,8 @@ async function saveProperties(properties) {
 
         console.log(`Property ${property.account} updated:`);
         console.log(updatedFields);
+
+        updatedEntries++;
       }
     } else {
       // Insert the new property into the database
@@ -152,6 +156,9 @@ async function saveProperties(properties) {
       console.log(`New property added to database: ${property.account}`);
     }
   }
+
+  // Log number of updates to terminal
+  console.log('Updated properties:', updatedEntries);
 }
 
 module.exports = {
