@@ -1,20 +1,15 @@
-// Import the scraper and database modules
-const scraper = require('./scraper');
-const db = require('./database');
+const { scrape } = require('./scraper/scraper');
 
-// Define the URL to scrape
-const url = 'https://www.hctax.net/Property/listings/taxsalelisting';
-
-// Define a function to scrape the website and insert the properties into the database
-const scrapeProperties = async () => {
+// Scrape the website and save the data to the database
+async function run() {
   try {
-    const properties = await scraper.scrape(url);
-    await db.insertProperties(properties);
-    console.log('Scraped and saved properties successfully');
+    console.log(`Scraping ${new Date().toLocaleString()}`);
+    await scrape();
+    console.log('Scrape successful');
   } catch (error) {
     console.error(`Error scraping or saving properties: ${error.message}`);
   }
-};
+}
 
-// Call the scrapeProperties function to begin scraping and inserting the properties
-scrapeProperties();
+// Call the run function when the script is executed
+run();
