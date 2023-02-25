@@ -15,12 +15,12 @@ function createDB() {
       state TEXT,
       zip TEXT,
       precinct TEXT,
-      suit_number TEXT,
+      suitNumber TEXT,
       account TEXT,
-      suit_number_2 TEXT,
-      adjudged_value TEXT,
-      min_bid TEXT,
-      additional_field TEXT
+      suitNumber2 TEXT,
+      adjudgedValue TEXT,
+      minBid TEXT,
+      additionalField TEXT
     )
   `);
   db.close();
