@@ -1,56 +1,59 @@
+const axios = require('axios');
 const cheerio = require('cheerio');
-const request = require('request');
 
-// Define a function to scrape the website and extract the property data
-const scrape = (url) => {
+// Define the URL to scrape
+const url = 'https://www.hctax.net/Property/listings/taxsalelisting';
+
+// Define the function to scrape the properties
+const scrape = () => {
   return new Promise((resolve, reject) => {
-    request(url, (error, response, html) => {
-      if (error || response.statusCode !== 200) {
-        reject(new Error(`Error fetching URL: ${url}`));
-      } else {
-        const $ = cheerio.load(html);
+    // Send an HTTP GET request to the URL
+    axios
+      .get(url)
+      .then((response) => {
+        // Load the HTML document into Cheerio
+        const $ = cheerio.load(response.data);
 
-        // Define the CSS selector for the property container
-        const container =
-          '#taxSaleList > div.row.listingArea > div > ul.list-listings-2.list';
+        // Define an array to hold the scraped properties
         const properties = [];
 
-        // Extract the property data from each listing in the container
-        $(container + ' > li').each((i, el) => {
+        // Loop through each row in the property table
+        $('#dtBasicExample tbody tr').each((i, el) => {
+          // Find the columns in the current row
+          const cols = $(el).find('td');
+
+          // Extract the property data from the columns and store it in an object
           const property = {
             propertyId: i,
-            address: $(el).find('h3 > span.address').text(),
-            city: $(el).find('h3 > span.city').text(),
-            state: $(el).find('h3 > span.state').text(),
-            zip: $(el).find('h3 > span.zip').text(),
-            precinct: $(el).find('h4 > strong.precinct').text(),
-            suitNumber: $(el).find('h4 > strong:nth-child(2)').text(),
-            account: $(el)
-              .find('table tbody tr:nth-child(1) td.account.listingTd strong')
-              .text(),
-            suitNumber2: $(el)
-              .find(
-                'table tbody tr:nth-child(1) td.SuitNumber.listingTd strong'
-              )
-              .text(),
-            adjudgedValue: $(el)
-              .find(
-                'table tbody tr:nth-child(2) td.adjudgedValue.listingTd strong'
-              )
-              .text(),
-            minBid: $(el)
-              .find('table tbody tr:nth-child(2) td.minBid.listingTd strong')
-              .text(),
-            additionalField: $(el).find('span > strong').text(),
+            address: $(cols[0]).text(),
+            city: $(cols[1]).text(),
+            state: $(cols[2]).text(),
+            zip: $(cols[3]).text(),
+            precinct: $(cols[4]).text(),
+            suitNumber: $(cols[5]).text(),
+            account: $(cols[6]).text(),
+            suitNumber2: $(cols[7]).text(),
+            adjudgedValue: $(cols[8]).text(),
+            minBid: $(cols[9]).text(),
           };
 
-          // Add the property data to the properties array
+          // Check if the additional field is present and extract it if it is
+          const additionalField = $(cols[10]).find('strong').text().trim();
+          if (additionalField !== '') {
+            property.additionalField = additionalField;
+          }
+
+          // Add the property object to the properties array
           properties.push(property);
         });
 
+        // Resolve the promise with the properties array
         resolve(properties);
-      }
-    });
+      })
+      .catch((error) => {
+        // Reject the promise with the error
+        reject(error);
+      });
   });
 };
 
