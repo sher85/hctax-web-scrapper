@@ -11,16 +11,19 @@ if (!fs.existsSync('./database/properties.db')) {
 // Scrape the website and log the properties to the console
 async function run() {
   try {
-    console.log(`Scraping ${new Date().toLocaleString()}`);
-    const properties = await scrape();
+    // Time stamp
+    const startTime = new Date().toLocaleString();
+
+    console.log(`Scraping ${startTime}`);
+    const properties = await scrape((numUpdated) => {
+      console.log(`Updated properties: ${numUpdated}`);
+      sendEmail(
+        `Scraping complete ${startTime}`,
+        `The scraping process has completed successfully.\nScraped properties: ${properties.length}\nUpdated properties: ${numUpdated}`
+      );
+    });
     console.log('Scraped properties:', properties.length);
     console.log('Scrape successful');
-
-    // Send notification email
-    await sendEmail(
-      'Scraping complete',
-      'The scraping process has completed successfully.'
-    );
   } catch (error) {
     console.error(`Error scraping properties: ${error.message}`);
   }
