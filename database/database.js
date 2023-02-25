@@ -35,27 +35,32 @@ function getData(query, params = []) {
 }
 
 // Define a function to save the scraped properties to the database
-function saveProperties(properties) {
+async function saveProperties(properties) {
   console.log('number properties in database.js: ', properties.length);
-  return Promise.all(
-    properties.map((property) => {
-      const query = `INSERT INTO properties (address, city, state, zip, precinct, suit_number, account, suit_number_2, adjudged_value, min_bid, additional_field) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-      const params = [
-        property.address,
-        property.city,
-        property.state,
-        property.zip,
-        property.precinct,
-        property.suitNumber,
-        property.account,
-        property.suitNumber2,
-        property.adjudgedValue,
-        property.minBid,
-        property.additionalField,
-      ];
-      return runQuery(query, params);
-    })
+  const existingAccounts = await getData('SELECT account FROM properties');
+  const existingAccountsSet = new Set(
+    existingAccounts.map((property) => property.account)
   );
+  const newProperties = properties.filter(
+    (property) => !existingAccountsSet.has(property.account)
+  );
+  if (newProperties.length > 0) {
+    const query = `INSERT INTO properties (address, city, state, zip, precinct, suit_number, account, suit_number_2, adjudged_value, min_bid, additional_field) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const params = newProperties.map((property) => [
+      property.address,
+      property.city,
+      property.state,
+      property.zip,
+      property.precinct,
+      property.suitNumber,
+      property.account,
+      property.suitNumber2,
+      property.adjudgedValue,
+      property.minBid,
+      property.additionalField,
+    ]);
+    await Promise.all(params.map((param) => runQuery(query, param)));
+  }
 }
 
 module.exports = {
