@@ -15,15 +15,15 @@ async function run() {
     const startTime = new Date().toLocaleString();
 
     console.log(`Scraping ${startTime}`);
-    const properties = await scrape((numUpdated) => {
-      console.log(`Updated properties: ${numUpdated}`);
-      sendEmail(
-        `Scraping complete ${startTime}`,
-        `The scraping process has completed successfully.\nScraped properties: ${properties.length}\nUpdated properties: ${numUpdated}`
-      );
-    });
+    const { properties, numUpdated } = await scrape();
     console.log('Scraped properties:', properties.length);
     console.log('Scrape successful');
+
+    // Send notification email
+    await sendEmail(
+      `Scraping complete ${startTime}`,
+      `The scraping process has completed successfully.\nScraped properties: ${properties.length}\nUpdated properties: ${numUpdated}`
+    );
   } catch (error) {
     console.error(`Error scraping properties: ${error.message}`);
   }

@@ -56,11 +56,11 @@ const scrape = () => {
           properties.push(property);
         });
 
-        // Save the properties to the database
-        saveProperties(properties);
+        // Save the properties to the database and get the number of updated properties
+        const numUpdated = saveProperties(properties);
 
-        // Resolve the promise with the properties array
-        resolve(properties);
+        // Resolve the promise with an object that includes the properties array and the numUpdated count
+        resolve({ properties, numUpdated });
       })
       .catch((error) => {
         // Reject the promise with the error
