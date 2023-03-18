@@ -10,14 +10,16 @@ To install the necessary packages, run the following command:
 
 To run the scraper, use the following command:
 
+node index.js
+
 This will scrape the website and save the data to a SQLite database. If the database file does not exist, it will be created.
 
 ## Project Structure
 
-- `scraper/scraper.js` - Contains the function for scraping the website.
-- `database/createDB.js` - Contains the function for creating the SQLite database.
-- `database/database.js` - Contains the functions for working with the SQLite database.
-- `index.js` - The main file that runs the scraper and saves the data to the database.
+-   `scraper/scraper.js` - Contains the function for scraping the website.
+-   `database/createDB.js` - Contains the function for creating the SQLite database.
+-   `database/database.js` - Contains the functions for working with the SQLite database.
+-   `index.js` - The main file that runs the scraper and saves the data to the database.
 
 ## License
 
