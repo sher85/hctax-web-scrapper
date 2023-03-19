@@ -1,11 +1,16 @@
 const fs = require('fs');
 const { scrape } = require('./scraper/scraper');
-const createDB = require('./database/createDB');
+const { createDB, createPropertyHistoryTable } = require('./database/createDB');
 const sendEmail = require('./email/sendEmail');
 
 // Check if the database file exists and create it if it doesn't
 if (!fs.existsSync('./database/properties.db')) {
     createDB();
+}
+
+// Check if the property history table exists and create it if it doesn't
+if (!fs.existsSync('./database/property_history.db')) {
+    createPropertyHistoryTable();
 }
 
 // Scrape the website and log the properties to the console
@@ -17,15 +22,12 @@ async function run() {
         console.log(`Scraping ${startTime}`);
         const { properties, numUpdated } = await scrape();
         console.log('Scraped properties:', properties.length);
-        console.log('Number of updated properties:', await numUpdated);
         console.log('Scrape successful');
 
         // Send notification email
         await sendEmail(
             `Scraping complete ${startTime}`,
-            `The scraping process has completed successfully.\nScraped properties: ${
-                properties.length
-            }\nUpdated properties: ${await numUpdated}`
+            `The scraping process has completed successfully.\nScraped properties: ${properties.length}\nUpdated properties: ${numUpdated}`
         );
     } catch (error) {
         console.error(`Error scraping properties: ${error.message}`);
