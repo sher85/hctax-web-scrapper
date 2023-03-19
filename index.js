@@ -5,28 +5,29 @@ const sendEmail = require('./email/sendEmail');
 
 // Check if the database file exists and create it if it doesn't
 if (!fs.existsSync('./database/properties.db')) {
-  createDB();
+    createDB();
 }
 
 // Scrape the website and log the properties to the console
 async function run() {
-  try {
-    // Time stamp
-    const startTime = new Date().toLocaleString();
+    try {
+        // Time stamp
+        const startTime = new Date().toLocaleString();
 
-    console.log(`Scraping ${startTime}`);
-    const { properties, numUpdated } = await scrape();
-    console.log('Scraped properties:', properties.length);
-    console.log('Scrape successful');
+        console.log(`Scraping ${startTime}`);
+        const { properties, numUpdated } = await scrape();
+        console.log('Scraped properties:', properties.length);
+        console.log('Number of updated properties:', numUpdated);
+        console.log('Scrape successful');
 
-    // Send notification email
-    await sendEmail(
-      `Scraping complete ${startTime}`,
-      `The scraping process has completed successfully.\nScraped properties: ${properties.length}\nUpdated properties: ${numUpdated}`
-    );
-  } catch (error) {
-    console.error(`Error scraping properties: ${error.message}`);
-  }
+        // Send notification email
+        await sendEmail(
+            `Scraping complete ${startTime}`,
+            `The scraping process has completed successfully.\nScraped properties: ${properties.length}\nUpdated properties: ${numUpdated}`
+        );
+    } catch (error) {
+        console.error(`Error scraping properties: ${error.message}`);
+    }
 }
 
 // Call the run function when the script is executed
