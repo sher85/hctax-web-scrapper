@@ -17,7 +17,6 @@ async function run() {
         console.log(`Scraping ${startTime}`);
         const { properties, numUpdated } = await scrape();
         console.log('Scraped properties:', properties.length);
-        console.log('Number of updated properties:', await numUpdated);
         console.log('Scrape successful');
 
         // Send notification email
