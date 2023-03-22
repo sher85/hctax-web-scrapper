@@ -6,9 +6,11 @@ This is a simple web scraper that scrapes a website and saves the data to a SQLi
 
 To install the necessary packages, run the following command:
 
+npm install
+
 ## Usage
 
-To run the scraper, use the following command:
+To run the scraper, use the following terminal command:
 
 node index.js
 
