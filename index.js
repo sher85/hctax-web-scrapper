@@ -27,7 +27,9 @@ async function run() {
         // Send notification email
         await sendEmail(
             `Scraping complete ${startTime}`,
-            `The scraping process has completed successfully.\nScraped properties: ${properties.length}\nUpdated properties: ${numUpdated}`
+            `The scraping process has completed successfully.\nScraped properties: ${
+                properties.length
+            }\nUpdated properties: ${await numUpdated}`
         );
     } catch (error) {
         console.error(`Error scraping properties: ${error.message}`);
