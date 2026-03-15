@@ -9,7 +9,7 @@ Typed Node.js CLI for scraping Harris County tax sale listings, storing a local 
 - Change tracking in `property_history`
 - Optional email summaries through Gmail SMTP credentials
 - Parser tests with Vitest
-- Conventional-commit releases with changelog generation
+- Conventional-commit release PRs and GitHub Releases via Release Please
 
 ## Requirements
 
@@ -57,8 +57,6 @@ npm run start
 - `npm run test`: run the Vitest suite once
 - `npm run check`: run typecheck, tests, and build
 - `npm run commitlint`: lint a commit range against the Conventional Commits spec
-- `npm run release`: create a local versioned release with `release-it`
-- `npm run release:dry-run`: preview the next release without writing changes
 
 ## Data Model
 
@@ -89,21 +87,14 @@ chore: update CI release flow
 
 The repo includes a Husky `commit-msg` hook plus `commitlint` config to enforce that format locally after `npm install`.
 
-To preview the next release:
+After you push commits to `main`, `.github/workflows/release-please.yml` asks Release Please to inspect the Conventional Commit history.
 
-```bash
-npm run release:dry-run
-```
-
-To create a local version tag and update the changelog:
-
-```bash
-npm run release
-```
-
-This runs `npm run check`, bumps `package.json`, updates [CHANGELOG.md](CHANGELOG.md), creates a release commit, and tags it as `vX.Y.Z`. NPM publishing is disabled by design.
+- If there are releasable commits such as `feat:` or `fix:`, Release Please opens or updates a release PR.
+- When that release PR is merged, Release Please updates `package.json`, updates [CHANGELOG.md](CHANGELOG.md), creates a tag like `v0.2.0`, and publishes a GitHub Release.
 
 For GitHub-hosted releases, the repo also includes:
 
 - `.github/workflows/ci.yml`: validates commits and runs checks on pushes and pull requests
-- `.github/workflows/release.yml`: manual release workflow that creates a git tag and GitHub Release using `GITHUB_TOKEN`
+- `.github/workflows/release-please.yml`: opens release PRs on `main` and creates GitHub Releases after merge
+
+If you want other workflows to run on Release Please-created PRs and releases, create a repository secret named `RELEASE_PLEASE_TOKEN` with a GitHub personal access token. Without that secret, the workflow falls back to `GITHUB_TOKEN`, which still creates the PR and Release but does not trigger downstream GitHub Actions from those generated events.

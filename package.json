@@ -10,9 +10,6 @@
     "check": "npm run typecheck && npm run test && npm run build",
     "commitlint": "commitlint --from=${FROM_REF:-HEAD~1} --to=${TO_REF:-HEAD} --verbose",
     "prepare": "husky",
-    "release": "release-it",
-    "release:ci": "release-it --ci",
-    "release:dry-run": "release-it --dry-run",
     "scrape": "tsx src/index.ts",
     "start": "node dist/index.js",
     "test": "vitest run",
@@ -32,18 +29,11 @@
   "devDependencies": {
     "@commitlint/cli": "^20.4.4",
     "@commitlint/config-conventional": "^20.4.4",
-    "@release-it/conventional-changelog": "^10.0.6",
     "@types/node": "^22.13.10",
     "@types/nodemailer": "^6.4.17",
-    "conventional-changelog-conventionalcommits": "8.0.0",
     "husky": "^9.1.7",
-    "release-it": "^19.0.4",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4"
-  },
-  "overrides": {
-    "conventional-changelog-conventionalcommits": "8.0.0",
-    "undici": "^6.24.0"
   }
 }
