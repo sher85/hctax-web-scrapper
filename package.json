@@ -1,9 +1,36 @@
 {
-    "dependencies": {
-        "axios": "^1.8.2",
-        "cheerio": "^1.0.0-rc.12",
-        "dotenv": "^16.3.1",
-        "nodemailer": "^6.9.6",
-        "sqlite3": "^5.1.6"
-    }
+  "name": "hctax-web-scrapper",
+  "version": "0.1.0",
+  "description": "TypeScript CLI for scraping Harris County tax sale listings and tracking changes in SQLite.",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "npm run typecheck && npm run test && npm run build",
+    "release": "release-it",
+    "scrape": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.13.6",
+    "cheerio": "^1.2.0",
+    "dotenv": "^17.3.1",
+    "nodemailer": "^8.0.2",
+    "sqlite3": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "@types/nodemailer": "^6.4.17",
+    "release-it": "^19.0.4",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
 }
