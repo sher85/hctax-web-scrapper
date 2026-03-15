@@ -1,6 +1,6 @@
 {
   "name": "hctax-web-scrapper",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "TypeScript CLI for scraping Harris County tax sale listings and tracking changes in SQLite.",
   "private": true,
   "main": "dist/index.js",
