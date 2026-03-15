@@ -7,7 +7,19 @@
   "github": {
     "release": false
   },
+  "hooks": {
+    "before:init": "npm run check"
+  },
   "npm": {
     "publish": false
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "header": "# Changelog",
+      "infile": "CHANGELOG.md",
+      "preset": {
+        "name": "conventionalcommits"
+      }
+    }
   }
 }
